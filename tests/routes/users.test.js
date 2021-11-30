@@ -372,17 +372,15 @@ describe(`Test ${endpoint} endpoints`, () => {
     });
 
     test("Return 403 for missing token", async () => {
-      const response = await request
-        .put(`${endpoint}/${user._id.toString()}`)
-        .send({
-          role: "ADMIN",
-        });
+      const response = await request.put(`${endpoint}/${user._id}`).send({
+        role: "ADMIN",
+      });
       expect(response.status).toBe(403);
     });
 
     test("Return 403 for invalid token", async () => {
       const response = await request
-        .put(`${endpoint}/${user._id.toString()}`)
+        .put(`${endpoint}/${user._id}`)
         .send({
           role: "ADMIN",
         })
@@ -392,7 +390,7 @@ describe(`Test ${endpoint} endpoints`, () => {
 
     test("Return 403 for unauthorized token", async () => {
       const response = await request
-        .put(`${endpoint}/${user._id.toString()}`)
+        .put(`${endpoint}/${user._id}`)
         .send({
           role: "ADMIN",
         })
@@ -402,7 +400,7 @@ describe(`Test ${endpoint} endpoints`, () => {
 
     test("Return 403 for customer updating their role", async () => {
       const response = await request
-        .put(`${endpoint}/${user._id.toString()}`)
+        .put(`${endpoint}/${user._id}`)
         .send({
           role: "ADMIN",
         })
@@ -412,7 +410,7 @@ describe(`Test ${endpoint} endpoints`, () => {
 
     test("Return 403 for expired token", async () => {
       const response = await request
-        .put(`${endpoint}/${user._id.toString()}`)
+        .put(`${endpoint}/${user._id}`)
         .send({
           role: "ADMIN",
         })
@@ -422,7 +420,7 @@ describe(`Test ${endpoint} endpoints`, () => {
 
     test("Return 400 for missing payload", async () => {
       const response = await request
-        .put(`${endpoint}/${user._id.toString()}`)
+        .put(`${endpoint}/${user._id}`)
         .set("Authorization", `Bearer ${tokens.admin}`);
       expect(response.status).toBe(400);
     });
@@ -430,7 +428,7 @@ describe(`Test ${endpoint} endpoints`, () => {
     describe("Return 200 and updated user for successful request", () => {
       test("Customer can update their account", async () => {
         const response = await request
-          .put(`${endpoint}/${user._id.toString()}`)
+          .put(`${endpoint}/${user._id}`)
           .send({
             password: "updated-password",
           })
@@ -440,7 +438,7 @@ describe(`Test ${endpoint} endpoints`, () => {
 
       test("Admin can update any user account", async () => {
         const response = await request
-          .put(`${endpoint}/${user._id.toString()}`)
+          .put(`${endpoint}/${user._id}`)
           .send({
             role: "ADMIN",
           })
@@ -480,29 +478,27 @@ describe(`Test ${endpoint} endpoints`, () => {
     });
 
     test("Return 403 for missing token", async () => {
-      const response = await request.delete(
-        `${endpoint}/${samples[0]._id.toString()}`
-      );
+      const response = await request.delete(`${endpoint}/${samples[0]._id}`);
       expect(response.status).toBe(403);
     });
 
     test("Return 403 for invalid token", async () => {
       const response = await request
-        .delete(`${endpoint}/${samples[0]._id.toString()}`)
+        .delete(`${endpoint}/${samples[0]._id}`)
         .set("Authorization", `Bearer ${tokens.invalid}`);
       expect(response.status).toBe(403);
     });
 
     test("Return 403 for unauthorized token", async () => {
       const response = await request
-        .delete(`${endpoint}/${samples[0]._id.toString()}`)
+        .delete(`${endpoint}/${samples[0]._id}`)
         .set("Authorization", `Bearer ${tokens.customer}`);
       expect(response.status).toBe(403);
     });
 
     test("Return 403 for expired token", async () => {
       const response = await request
-        .delete(`${endpoint}/${samples[0]._id.toString()}`)
+        .delete(`${endpoint}/${samples[0]._id}`)
         .set("Authorization", `Bearer ${tokens.expiredAdmin}`);
       expect(response.status).toBe(403);
     });
@@ -511,7 +507,7 @@ describe(`Test ${endpoint} endpoints`, () => {
       test("Customer can delete their account", async () => {
         const token = await createToken(samples[0]);
         const response = await request
-          .delete(`${endpoint}/${samples[0]._id.toString()}`)
+          .delete(`${endpoint}/${samples[0]._id}`)
           .set("Authorization", `Bearer ${token}`);
         expect(response.status).toBe(200);
         expect(response.body.data).toStrictEqual(samples[0]);
@@ -519,7 +515,7 @@ describe(`Test ${endpoint} endpoints`, () => {
 
       test("Admin can delete any user account", async () => {
         const response = await request
-          .delete(`${endpoint}/${samples[1]._id.toString()}`)
+          .delete(`${endpoint}/${samples[1]._id}`)
           .set("Authorization", `Bearer ${tokens.admin}`);
         expect(response.status).toBe(200);
         expect(response.body.data).toStrictEqual(samples[1]);

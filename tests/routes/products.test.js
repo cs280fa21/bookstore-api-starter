@@ -222,17 +222,15 @@ describe(`Test ${endpoint} endpoints`, () => {
     });
 
     test("Return 403 for missing token", async () => {
-      const response = await request
-        .put(`${endpoint}/${product._id.toString()}`)
-        .send({
-          name: `${product.name} 2nd Edition`,
-        });
+      const response = await request.put(`${endpoint}/${product._id}`).send({
+        name: `${product.name} 2nd Edition`,
+      });
       expect(response.status).toBe(403);
     });
 
     test("Return 403 for invalid token", async () => {
       const response = await request
-        .put(`${endpoint}/${product._id.toString()}`)
+        .put(`${endpoint}/${product._id}`)
         .send({
           name: `${product.name} 2nd Edition`,
         })
@@ -242,7 +240,7 @@ describe(`Test ${endpoint} endpoints`, () => {
 
     test("Return 403 for unauthorized token", async () => {
       const response = await request
-        .put(`${endpoint}/${product._id.toString()}`)
+        .put(`${endpoint}/${product._id}`)
         .send({
           name: `${product.name} 2nd Edition`,
         })
@@ -252,7 +250,7 @@ describe(`Test ${endpoint} endpoints`, () => {
 
     test("Return 403 for expired token", async () => {
       const response = await request
-        .put(`${endpoint}/${product._id.toString()}`)
+        .put(`${endpoint}/${product._id}`)
         .send({
           name: `${product.name} 2nd Edition`,
         })
@@ -262,14 +260,14 @@ describe(`Test ${endpoint} endpoints`, () => {
 
     test("Return 400 for missing payload", async () => {
       const response = await request
-        .put(`${endpoint}/${product._id.toString()}`)
+        .put(`${endpoint}/${product._id}`)
         .set("Authorization", `Bearer ${tokens.admin}`);
       expect(response.status).toBe(400);
     });
 
     test("Return 200 and updated product for successful request", async () => {
       const response = await request
-        .put(`${endpoint}/${product._id.toString()}`)
+        .put(`${endpoint}/${product._id}`)
         .send({
           name: `${product.name} 2nd Edition`,
         })
@@ -301,36 +299,34 @@ describe(`Test ${endpoint} endpoints`, () => {
     });
 
     test("Return 403 for missing token", async () => {
-      const response = await request.delete(
-        `${endpoint}/${product._id.toString()}`
-      );
+      const response = await request.delete(`${endpoint}/${product._id}`);
       expect(response.status).toBe(403);
     });
 
     test("Return 403 for invalid token", async () => {
       const response = await request
-        .delete(`${endpoint}/${product._id.toString()}`)
+        .delete(`${endpoint}/${product._id}`)
         .set("Authorization", `Bearer ${tokens.invalid}`);
       expect(response.status).toBe(403);
     });
 
     test("Return 403 for unauthorized token", async () => {
       const response = await request
-        .delete(`${endpoint}/${product._id.toString()}`)
+        .delete(`${endpoint}/${product._id}`)
         .set("Authorization", `Bearer ${tokens.customer}`);
       expect(response.status).toBe(403);
     });
 
     test("Return 403 for expired token", async () => {
       const response = await request
-        .delete(`${endpoint}/${product._id.toString()}`)
+        .delete(`${endpoint}/${product._id}`)
         .set("Authorization", `Bearer ${tokens.expiredAdmin}`);
       expect(response.status).toBe(403);
     });
 
     test("Return 200 & deleted product for successful request", async () => {
       const response = await request
-        .delete(`${endpoint}/${product._id.toString()}`)
+        .delete(`${endpoint}/${product._id}`)
         .set("Authorization", `Bearer ${tokens.admin}`);
       expect(response.status).toBe(200);
       expect(response.body.data).toStrictEqual(product);

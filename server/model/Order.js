@@ -20,6 +20,6 @@ const OrderSchema = new mongoose.Schema({
   ],
 });
 
-const Product = mongoose.model("Order", OrderSchema);
+const Order = mongoose.model("Order", OrderSchema);
 
-module.exports = Product;
+module.exports = Order;
